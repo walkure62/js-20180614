@@ -3,12 +3,33 @@
 import Component from '../../component.js'
 
 export default class PhoneCatalog extends Component {
-  constructor({ element, phones }) {
+  constructor({ element, phones, onPhoneSelected }) {
     super({ element })
 
     this._phones = phones;
+    this._onPhoneSelected = onPhoneSelected;
 
     this._render();
+
+    // this._element.addEventListener('click', (event) => {
+    //   let delegateTarget = event.target.closest('[data-element="phone-link"]');
+    //
+    //   if (!delegateTarget) {
+    //     return;
+    //   }
+    //
+    //   event.delegateTarget = delegateTarget;
+    //
+    //   let phoneLink = event.delegateTarget;
+    //
+    //   this._onPhoneSelected(phoneLink.dataset.phoneId);
+    // });
+
+    this.on('click', '[data-element="phone-link"]', (event) => {
+      let phoneLink = event.delegateTarget;
+
+      this._onPhoneSelected(phoneLink.dataset.phoneId);
+    })
   }
 
   _render() {
@@ -17,17 +38,29 @@ export default class PhoneCatalog extends Component {
         ${ this._phones.map(phone => `
         
           <li class="thumbnail">
-            <a href="#!/phones/${ phone.id }" class="thumb">
+            <a
+              href="#!/phones/${ phone.id }"
+              class="thumb"
+              data-element="phone-link"
+              data-phone-id="${ phone.id }"
+            >
               <img alt="${ phone.name }" src="${ phone.imageUrl }">
             </a>
   
             <div class="phones__btn-buy-wrapper">
-              <a class="btn btn-success">
+              <a class="btn btn-success" >
                 Add
               </a>
             </div>
   
-            <a href="#!/phones/${ phone.id }">${ phone.name }</a>
+            <a 
+              href="#!/phones/${ phone.id }"
+              data-element="phone-link"
+              data-phone-id="${ phone.id }"
+            >
+              ${ phone.name }
+            </a>
+            
             <p>${ phone.snippet }</p>
           </li>
         
