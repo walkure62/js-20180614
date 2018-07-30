@@ -1,6 +1,7 @@
 'use strict'
 
 import PhoneCatalog from './components/phone-catalog.js';
+import PhoneViewer from './components/phone-viewer.js';
 import PhoneService from './services/phone-service.js';
 
 export default class PhonesPage {
@@ -10,12 +11,22 @@ export default class PhonesPage {
     this._render();
 
     this._initCatalog();
+    this._initViewer();
+
+    this._catalog.hide();
+    this._viewer.showPhone({});
   }
 
   _initCatalog() {
     this._catalog = new PhoneCatalog({
       element: this._element.querySelector('[data-component="phone-catalog"]'),
       phones: PhoneService.getAll()
+    });
+  }
+
+  _initViewer() {
+    this._viewer = new PhoneViewer({
+      element: this._element.querySelector('[data-component="phone-viewer"]'),
     });
   }
 
@@ -54,6 +65,7 @@ export default class PhonesPage {
           <!--Main content-->
           <div class="col-md-10">
             <div data-component="phone-catalog"></div>
+            <div data-component="phone-viewer" class="js-hidden"></div>
           </div>
         </div>
       </div>
